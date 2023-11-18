@@ -15,7 +15,9 @@ class MainScene: SKScene {
     private var gameTimer: Timer?
     private var gameSpentTime: Int = 0
     private var timer: Timer?
-
+    private var firstStrip: Bool = true
+    private var gameIsStarted: Bool = false
+    
     private let ballCategory: UInt32 = 0x1 << 0
     private let obstacleCategory: UInt32 = 0x1 << 1
     private let wallCategory: UInt32 = 0x1 << 2
@@ -78,7 +80,7 @@ class MainScene: SKScene {
             }
         }
     }
-
+    
     private func updateBallVelocity(acceleration: CMAcceleration) {
         let sensitivity: CGFloat = 500.0
         ball.physicsBody?.velocity.dx = CGFloat(acceleration.x) * sensitivity
@@ -88,26 +90,48 @@ class MainScene: SKScene {
         generateStripWithHole()
         timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(generateStripWithHole), userInfo: nil, repeats: true)
     }
-
+    
     @objc private func generateStripWithHole() {
         var moveRight = true
         let stripHeight: CGFloat = 5.0
         let stripWidth: CGFloat = size.width
         let holePosition = CGFloat.random(in: holeWidth / 2...(stripWidth - holeWidth / 2))
         let wallMoveSpeedCoefficient: CGFloat = 1.0 / 25.0
-
+        var trianglePosX: CGFloat = 0
+        var stripsMovementTimer: Timer?
+        
         let leftStrip = SKSpriteNode(color: .white, size: CGSize(width: holePosition - holeWidth / 2, height: stripHeight))
         leftStrip.name = "strip"
         leftStrip.position = CGPoint(x: leftStrip.size.width / 2, y: -stripHeight / 2)
         setupStrip(strip: leftStrip)
         addChild(leftStrip)
-
+        
         let rightStrip = SKSpriteNode(color: .white, size: CGSize(width: stripWidth - (holePosition + holeWidth / 2), height: stripHeight))
         rightStrip.name = "strip"
         rightStrip.position = CGPoint(x: size.width - rightStrip.size.width / 2, y: -stripHeight / 2)
         setupStrip(strip: rightStrip)
         addChild(rightStrip)
-
+        
+        let triangleOnStrip = TriangleShapeNode(size: triangleSize)
+        triangleOnStrip.name = "triangleOnStrip"
+        triangleOnStrip.zRotation = CGFloat.pi
+        let triangleOnStripWidth = triangleOnStrip.frame.size.width
+        if leftStrip.size.width >= triangleOnStripWidth && rightStrip.size.width >= triangleOnStripWidth {
+            if Bool.random() == true {
+                trianglePosX = CGFloat.random(in: triangleOnStripWidth / 2...(leftStrip.size.width - triangleOnStripWidth / 2))
+            } else {
+                trianglePosX = CGFloat.random(in: leftStrip.size.width + holeWidth + triangleOnStripWidth / 2...stripWidth - triangleOnStripWidth / 2)
+            }
+        } else if leftStrip.size.width >= triangleOnStripWidth {
+            trianglePosX = CGFloat.random(in: triangleOnStripWidth / 2...(leftStrip.size.width - triangleOnStripWidth / 2))
+        } else if rightStrip.size.width >= triangleOnStripWidth {
+            trianglePosX = CGFloat.random(in: leftStrip.size.width + holeWidth + triangleOnStripWidth / 2...stripWidth - triangleOnStripWidth / 2)
+        }
+        triangleOnStrip.position = CGPoint(x: trianglePosX, y: triangleOnStrip.frame.size.height / 2)
+        if firstStrip == false {
+            addChild(triangleOnStrip)
+        }
+        
         let moveLeftAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
         let removeAction = SKAction.removeFromParent()
         leftStrip.run(SKAction.sequence([moveLeftAction, removeAction]))
@@ -115,13 +139,17 @@ class MainScene: SKScene {
         let moveRightAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
         rightStrip.run(SKAction.sequence([moveRightAction, removeAction]))
         
-        let stripsMovementTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.001), repeats: true) { timer in
+        let triangleOnStripMoveUp = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
+        triangleOnStrip.run(SKAction.sequence([triangleOnStripMoveUp, removeAction]))
+        
+        stripsMovementTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.001), repeats: true) { timer in
             if moveRight == true {
                 leftStrip.size.width += 0.1
                 rightStrip.size.width -= 0.1
                 
                 leftStrip.position.x = leftStrip.size.width / 2
                 rightStrip.position.x = self.size.width - rightStrip.size.width / 2
+                triangleOnStrip.position.x += 0.1
                 
                 setupStrip(strip: leftStrip)
                 setupStrip(strip: rightStrip)
@@ -135,6 +163,7 @@ class MainScene: SKScene {
                 
                 leftStrip.position.x = leftStrip.size.width / 2
                 rightStrip.position.x = self.size.width - rightStrip.size.width / 2
+                triangleOnStrip.position.x -= 0.1
                 
                 setupStrip(strip: leftStrip)
                 setupStrip(strip: rightStrip)
@@ -146,8 +175,11 @@ class MainScene: SKScene {
         }
         
         Timer.scheduledTimer(withTimeInterval: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)), repeats: false) { timer in
-            stripsMovementTimer.invalidate()
+            stripsMovementTimer?.invalidate()
+            stripsMovementTimer = nil
         }
+        
+        firstStrip = false
         
         func setupStrip(strip: SKSpriteNode) {
             strip.physicsBody = SKPhysicsBody(rectangleOf: strip.size)
@@ -180,7 +212,7 @@ class MainScene: SKScene {
             addChild(triangle)
         }
     }
-
+    
     deinit {
         motionManager.stopAccelerometerUpdates()
     }
@@ -199,7 +231,7 @@ class MainScene: SKScene {
                 let fadeOut = SKAction.fadeOut(withDuration: 0.5)
                 let scaleDown = SKAction.scale(to: 0.1, duration: 0.5)
                 let groupAction = SKAction.group([fadeOut, scaleDown])
-
+                
                 self.isPaused = false
                 createTriangels()
                 startStripGeneratorTimer()
@@ -219,6 +251,7 @@ class MainScene: SKScene {
         timer = nil
         gameTimer?.invalidate()
         gameTimer = nil
+        gameIsStarted = false
         if gameSpentTime >= 30 {
             NotificationCenter.default.post(name: NSNotification.Name("EndGame"), object: nil, userInfo: ["winner": true])
         } else {
@@ -227,6 +260,10 @@ class MainScene: SKScene {
     }
     
     func startGame() {
+        guard gameIsStarted == false else { 
+            self.isPaused = false
+            return }
+        firstStrip = true
         self.isPaused = true
         ball.position = CGPoint(x: size.width / 2, y: size.height / 2)
         self.startButton.alpha = 1.0
@@ -234,22 +271,30 @@ class MainScene: SKScene {
         self.startButton.yScale = 1.0
         addChild(ball)
         addChild(startButton)
+        gameIsStarted = true
     }
 }
 
 extension MainScene: SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if contact.bodyA.node?.name == "strip" && contact.bodyB.node?.name == "triangle" {
+        if (contact.bodyA.node?.name == "strip") && contact.bodyB.node?.name == "triangle" {
             contact.bodyA.node?.removeFromParent()
         } else if contact.bodyB.node?.name == "strip" && contact.bodyA.node?.name == "triangle" {
             contact.bodyB.node?.removeFromParent()
         }
         
-        if contact.bodyA.node?.name == "ball" && contact.bodyB.node?.name == "triangle" {
+        if contact.bodyA.node?.name == "ball" && (contact.bodyB.node?.name == "triangle" || contact.bodyB.node?.name == "triangleOnStrip") {
             endGame()
-        } else if contact.bodyB.node?.name == "ball" && contact.bodyA.node?.name == "triangle" {
+        } else if contact.bodyB.node?.name == "ball" && (contact.bodyA.node?.name == "triangle" || contact.bodyA.node?.name == "triangleOnStrip") {
             endGame()
+        }
+        
+        if contact.bodyA.node?.name == "triangle" && contact.bodyB.node?.name == "triangleOnStrip" {
+            contact.bodyB.node?.removeFromParent()
+            
+        } else if contact.bodyB.node?.name == "triangle" && contact.bodyA.node?.name == "triangleOnStrip" {
+            contact.bodyA.node?.removeFromParent()
         }
     }
 }

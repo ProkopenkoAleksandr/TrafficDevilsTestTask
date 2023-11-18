@@ -31,6 +31,10 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(showWebView), name: NSNotification.Name("EndGame"), object: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        (customView?.scene as? MainScene)?.isPaused = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         (customView?.scene as? MainScene)?.startGame()
