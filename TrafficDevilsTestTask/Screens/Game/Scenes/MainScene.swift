@@ -82,7 +82,7 @@ class MainScene: SKScene {
     }
     
     private func updateBallVelocity(acceleration: CMAcceleration) {
-        let sensitivity: CGFloat = 500.0
+        let sensitivity: CGFloat = 750.0
         ball.physicsBody?.velocity.dx = CGFloat(acceleration.x) * sensitivity
     }
     
