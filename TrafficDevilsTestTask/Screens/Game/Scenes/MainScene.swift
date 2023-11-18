@@ -256,7 +256,7 @@ class MainScene: SKScene {
     }
     
     private func startGameTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        gameTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.gameSpentTime += 1
         }
     }
@@ -275,6 +275,7 @@ class MainScene: SKScene {
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("EndGame"), object: nil, userInfo: ["winner": false])
         }
+        gameSpentTime = 0
     }
     
     func startGame() {
