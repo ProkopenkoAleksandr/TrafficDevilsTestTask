@@ -90,6 +90,7 @@ class MainScene: SKScene {
     }
 
     @objc private func generateStripWithHole() {
+        var moveRight = true
         let stripHeight: CGFloat = 5.0
         let stripWidth: CGFloat = size.width
         let holePosition = CGFloat.random(in: holeWidth / 2...(stripWidth - holeWidth / 2))
@@ -98,23 +99,13 @@ class MainScene: SKScene {
         let leftStrip = SKSpriteNode(color: .white, size: CGSize(width: holePosition - holeWidth / 2, height: stripHeight))
         leftStrip.name = "strip"
         leftStrip.position = CGPoint(x: leftStrip.size.width / 2, y: -stripHeight / 2)
-        leftStrip.physicsBody = SKPhysicsBody(rectangleOf: leftStrip.size)
-        leftStrip.physicsBody?.categoryBitMask = obstacleCategory
-        leftStrip.physicsBody?.contactTestBitMask = ballCategory
-        leftStrip.physicsBody?.collisionBitMask = 0
-        leftStrip.physicsBody?.affectedByGravity = false
-        leftStrip.physicsBody?.allowsRotation = false
+        setupStrip(strip: leftStrip)
         addChild(leftStrip)
 
         let rightStrip = SKSpriteNode(color: .white, size: CGSize(width: stripWidth - (holePosition + holeWidth / 2), height: stripHeight))
         rightStrip.name = "strip"
         rightStrip.position = CGPoint(x: size.width - rightStrip.size.width / 2, y: -stripHeight / 2)
-        rightStrip.physicsBody = SKPhysicsBody(rectangleOf: rightStrip.size)
-        rightStrip.physicsBody?.categoryBitMask = obstacleCategory
-        rightStrip.physicsBody?.contactTestBitMask = ballCategory
-        rightStrip.physicsBody?.collisionBitMask = 0
-        rightStrip.physicsBody?.affectedByGravity = false
-        rightStrip.physicsBody?.allowsRotation = false
+        setupStrip(strip: rightStrip)
         addChild(rightStrip)
 
         let moveLeftAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
@@ -123,6 +114,50 @@ class MainScene: SKScene {
         
         let moveRightAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
         rightStrip.run(SKAction.sequence([moveRightAction, removeAction]))
+        
+        let stripsMovementTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.001), repeats: true) { timer in
+            if moveRight == true {
+                leftStrip.size.width += 0.1
+                rightStrip.size.width -= 0.1
+                
+                leftStrip.position.x = leftStrip.size.width / 2
+                rightStrip.position.x = self.size.width - rightStrip.size.width / 2
+                
+                setupStrip(strip: leftStrip)
+                setupStrip(strip: rightStrip)
+                
+                if rightStrip.size.width <= 0 {
+                    moveRight = false
+                }
+            } else {
+                leftStrip.size.width -= 0.1
+                rightStrip.size.width += 0.1
+                
+                leftStrip.position.x = leftStrip.size.width / 2
+                rightStrip.position.x = self.size.width - rightStrip.size.width / 2
+                
+                setupStrip(strip: leftStrip)
+                setupStrip(strip: rightStrip)
+                
+                if leftStrip.size.width <= 0 {
+                    moveRight = true
+                }
+            }
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)), repeats: false) { timer in
+            stripsMovementTimer.invalidate()
+        }
+        
+        func setupStrip(strip: SKSpriteNode) {
+            strip.physicsBody = SKPhysicsBody(rectangleOf: strip.size)
+            strip.physicsBody?.categoryBitMask = self.obstacleCategory
+            strip.physicsBody?.contactTestBitMask = self.ballCategory
+            strip.physicsBody?.collisionBitMask = 0
+            strip.physicsBody?.affectedByGravity = false
+            strip.physicsBody?.allowsRotation = false
+        }
+        
     }
     
     private func createTriangels() {
@@ -178,6 +213,7 @@ class MainScene: SKScene {
     
     private func endGame() {
         removeAllChildren()
+        removeAllActions()
         self.isPaused = true
         timer?.invalidate()
         timer = nil
