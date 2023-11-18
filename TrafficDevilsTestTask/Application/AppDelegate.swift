@@ -15,10 +15,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        if UserDefaults.standard.bool(forKey: "firstOpen") == false {
+            TrafficDevilsDataService.shared.endGameFetchData()
+            UserDefaults.standard.setValue(true, forKey: "firstOpen")
+        }
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = GameViewController()
         window?.makeKeyAndVisible()
-        
+                
         return true
     }
 

@@ -12,6 +12,12 @@
 		3012CDAF2B08036300361EBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3012CDAE2B08036300361EBF /* Assets.xcassets */; };
 		3012CDB22B08036300361EBF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3012CDB02B08036300361EBF /* LaunchScreen.storyboard */; };
 		3012CDB92B0803C100361EBF /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDB82B0803C100361EBF /* MainScene.swift */; };
+		3012CDBB2B08AF7400361EBF /* TriangleShapeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDBA2B08AF7400361EBF /* TriangleShapeNode.swift */; };
+		3012CDBD2B08B4C900361EBF /* GameResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDBC2B08B4C900361EBF /* GameResult.swift */; };
+		3012CDBF2B08B5D200361EBF /* TrafficDevilsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDBE2B08B5D200361EBF /* TrafficDevilsService.swift */; };
+		3012CDC12B08B64A00361EBF /* TrafficDevilsDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDC02B08B64A00361EBF /* TrafficDevilsDataService.swift */; };
+		3012CDC52B08BAE200361EBF /* URLDecodableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDC42B08BAE200361EBF /* URLDecodableModel.swift */; };
+		3012CDCE2B08BCE400361EBF /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3012CDCD2B08BCE400361EBF /* WebViewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +27,12 @@
 		3012CDAE2B08036300361EBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3012CDB12B08036300361EBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3012CDB82B0803C100361EBF /* MainScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
+		3012CDBA2B08AF7400361EBF /* TriangleShapeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleShapeNode.swift; sourceTree = "<group>"; };
+		3012CDBC2B08B4C900361EBF /* GameResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResult.swift; sourceTree = "<group>"; };
+		3012CDBE2B08B5D200361EBF /* TrafficDevilsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrafficDevilsService.swift; sourceTree = "<group>"; };
+		3012CDC02B08B64A00361EBF /* TrafficDevilsDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrafficDevilsDataService.swift; sourceTree = "<group>"; };
+		3012CDC42B08BAE200361EBF /* URLDecodableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLDecodableModel.swift; sourceTree = "<group>"; };
+		3012CDCD2B08BCE400361EBF /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,13 +65,83 @@
 		3012CDA02B08036200361EBF /* TrafficDevilsTestTask */ = {
 			isa = PBXGroup;
 			children = (
-				3012CDA12B08036200361EBF /* AppDelegate.swift */,
-				3012CDB82B0803C100361EBF /* MainScene.swift */,
-				3012CDA92B08036200361EBF /* GameViewController.swift */,
+				3012CDC32B08BA6B00361EBF /* Application */,
+				3012CDC72B08BB0F00361EBF /* Screens */,
+				3012CDC62B08BB0100361EBF /* Models */,
+				3012CDC22B08BA6000361EBF /* Services */,
 				3012CDAE2B08036300361EBF /* Assets.xcassets */,
 				3012CDB02B08036300361EBF /* LaunchScreen.storyboard */,
 			);
 			path = TrafficDevilsTestTask;
+			sourceTree = "<group>";
+		};
+		3012CDC22B08BA6000361EBF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDBE2B08B5D200361EBF /* TrafficDevilsService.swift */,
+				3012CDC02B08B64A00361EBF /* TrafficDevilsDataService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		3012CDC32B08BA6B00361EBF /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDA12B08036200361EBF /* AppDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		3012CDC62B08BB0100361EBF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDC42B08BAE200361EBF /* URLDecodableModel.swift */,
+				3012CDBC2B08B4C900361EBF /* GameResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3012CDC72B08BB0F00361EBF /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDC82B08BB3D00361EBF /* Game */,
+				3012CDCF2B08C87B00361EBF /* WebView */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		3012CDC82B08BB3D00361EBF /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDC92B08BB4900361EBF /* Views */,
+				3012CDCA2B08BB6900361EBF /* Scenes */,
+				3012CDA92B08036200361EBF /* GameViewController.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		3012CDC92B08BB4900361EBF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDBA2B08AF7400361EBF /* TriangleShapeNode.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3012CDCA2B08BB6900361EBF /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDB82B0803C100361EBF /* MainScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		3012CDCF2B08C87B00361EBF /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				3012CDCD2B08BCE400361EBF /* WebViewViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,8 +215,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3012CDB92B0803C100361EBF /* MainScene.swift in Sources */,
+				3012CDC52B08BAE200361EBF /* URLDecodableModel.swift in Sources */,
 				3012CDAA2B08036200361EBF /* GameViewController.swift in Sources */,
 				3012CDA22B08036200361EBF /* AppDelegate.swift in Sources */,
+				3012CDC12B08B64A00361EBF /* TrafficDevilsDataService.swift in Sources */,
+				3012CDBB2B08AF7400361EBF /* TriangleShapeNode.swift in Sources */,
+				3012CDBF2B08B5D200361EBF /* TrafficDevilsService.swift in Sources */,
+				3012CDCE2B08BCE400361EBF /* WebViewViewController.swift in Sources */,
+				3012CDBD2B08B4C900361EBF /* GameResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +373,7 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -312,6 +401,7 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
