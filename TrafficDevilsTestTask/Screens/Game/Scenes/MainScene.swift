@@ -26,6 +26,8 @@ class MainScene: SKScene {
     private var holeWidth: CGFloat = 50
     private var triangleSize: CGFloat = 40
     
+    private var touchedNode: SKNode?
+    
     private var startButton: SKSpriteNode = {
         let node = SKSpriteNode(imageNamed: "orangeButton")
         node.size = CGSize(width: UIScreen.main.bounds.width - 40, height: 50)
@@ -64,6 +66,42 @@ class MainScene: SKScene {
         
         createWalls()
         setupAccelerometer()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            let node = self.atPoint(location)
+            if node.name == "playButton" || node.name == "playButtonText" {
+                startButton.setScale(0.9)
+                startButton.alpha = 0.8
+                touchedNode = node
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            let node = self.atPoint(location)
+            if touchedNode == node && (node.name == "playButton" || node.name == "playButtonText") {
+                let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+                let scaleDown = SKAction.scale(to: 0.1, duration: 0.5)
+                let groupAction = SKAction.group([fadeOut, scaleDown])
+                
+                self.isPaused = false
+                addChild(ball)
+                createTriangels()
+                startStripGeneratorTimer()
+                startGameTimer()
+                startButton.run(groupAction) {
+                    self.startButton.removeFromParent()
+                }
+            } else {
+                startButton.setScale(1.0)
+                startButton.alpha = 1.0
+            }
+        }
     }
     
     private func createWalls() {
@@ -223,26 +261,6 @@ class MainScene: SKScene {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let node = self.atPoint(location)
-            if node.name == "playButton" || node.name == "playButtonText" {
-                let fadeOut = SKAction.fadeOut(withDuration: 0.5)
-                let scaleDown = SKAction.scale(to: 0.1, duration: 0.5)
-                let groupAction = SKAction.group([fadeOut, scaleDown])
-                
-                self.isPaused = false
-                createTriangels()
-                startStripGeneratorTimer()
-                startGameTimer()
-                startButton.run(groupAction) {
-                    self.startButton.removeFromParent()
-                }
-            }
-        }
-    }
-    
     private func endGame() {
         removeAllChildren()
         removeAllActions()
@@ -269,7 +287,6 @@ class MainScene: SKScene {
         self.startButton.alpha = 1.0
         self.startButton.xScale = 1.0
         self.startButton.yScale = 1.0
-        addChild(ball)
         addChild(startButton)
         gameIsStarted = true
     }
