@@ -153,6 +153,7 @@ class MainScene: SKScene {
         let triangleOnStrip = TriangleShapeNode(size: triangleSize)
         triangleOnStrip.name = "triangleOnStrip"
         triangleOnStrip.zRotation = CGFloat.pi
+        triangleOnStrip.physicsBody?.contactTestBitMask = self.ballCategory
         let triangleOnStripWidth = triangleOnStrip.frame.size.width
         if leftStrip.size.width >= triangleOnStripWidth && rightStrip.size.width >= triangleOnStripWidth {
             if Bool.random() == true {
@@ -210,6 +211,9 @@ class MainScene: SKScene {
                     moveRight = true
                 }
             }
+        }
+        if triangleOnStrip.position.y >= Double((self.view?.frame.size.height ?? 0) - (self.view?.safeAreaInsets.top ?? 0)) {
+            triangleOnStrip.removeFromParent()
         }
         
         Timer.scheduledTimer(withTimeInterval: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)), repeats: false) { timer in
