@@ -172,15 +172,15 @@ class MainScene: SKScene {
             addChild(triangleOnStrip)
         }
         
-        let moveLeftAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
+        let leftStripMoveUpAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
         let removeAction = SKAction.removeFromParent()
-        leftStrip.run(SKAction.sequence([moveLeftAction, removeAction]))
+        leftStrip.run(SKAction.sequence([leftStripMoveUpAction, removeAction]))
         
-        let moveRightAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
-        rightStrip.run(SKAction.sequence([moveRightAction, removeAction]))
+        let rightStripMoveUpAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
+        rightStrip.run(SKAction.sequence([rightStripMoveUpAction, removeAction]))
         
-        let triangleOnStripMoveUp = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
-        triangleOnStrip.run(SKAction.sequence([triangleOnStripMoveUp, removeAction]))
+        let triangleOnStripMoveUpAction = SKAction.move(by: CGVector(dx: 0, dy: size.height + stripHeight), duration: TimeInterval(size.height / (ballFallSpeed * wallMoveSpeedCoefficient)))
+        triangleOnStrip.run(SKAction.sequence([triangleOnStripMoveUpAction, removeAction]))
         
         stripsMovementTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.001), repeats: true) { timer in
             guard self.isPaused == false else { return }
