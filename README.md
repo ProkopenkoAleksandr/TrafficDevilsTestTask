@@ -8,7 +8,7 @@ Everything except the ball moves upward at a speed 25 slower than the speed at w
 A loss occurs if the ball stays on the platform and reaches the top of the screen for the conditions, if the time spent in the game is less than 30 seconds. 
 If time spent in the game is greater than or equal to 30 seconds, then the game is won.
 
-Game over screen is a full screen web view. Winner and loser got different urls to load in the webview. To get urls for winner and loser use this link : “https://2llctw8ia5.execute-api.us-west-1.amazonaws.com/prod”
+Game over screen is a full screen web view. Winner and loser got different urls to load in the webview. To get urls for winner and loser use this link : "https://2llctw8ia5.execute-api.us-west-1.amazonaws.com/prod"
 
 ### OPTIONAL
 * Add obstacles that automatically result in a loss when colliding with them
