@@ -130,6 +130,7 @@ class MainScene: SKScene {
     }
     
     @objc private func generateStripWithHole() {
+        guard self.isPaused == false else { return }
         var moveRight = true
         let stripHeight: CGFloat = 5.0
         let stripWidth: CGFloat = size.width
@@ -182,6 +183,7 @@ class MainScene: SKScene {
         triangleOnStrip.run(SKAction.sequence([triangleOnStripMoveUp, removeAction]))
         
         stripsMovementTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.001), repeats: true) { timer in
+            guard self.isPaused == false else { return }
             if moveRight == true {
                 leftStrip.size.width += 0.1
                 rightStrip.size.width -= 0.1
